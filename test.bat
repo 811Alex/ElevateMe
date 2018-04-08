@@ -9,8 +9,8 @@
 @echo off
 echo This script will only run successfully if ran with elevated privileges!
 call:showValue
-echo. & echo Attempting to change to "demand"...
-sc config TabletInputService start=demand
+echo. & echo Attempting to change to "disabled"...
+sc config TabletInputService start=disabled
 call:showValue
 echo. & echo Attempting to change to "auto"...
 sc config TabletInputService start=auto
