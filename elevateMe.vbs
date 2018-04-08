@@ -18,18 +18,16 @@ elevateMe
 ''''' Anything below here, will be executed with elevated privileges. '''''
 
 ''' This piece of code, treats the 1st arg that this script receives as an executable and it executes it with any extra args it gets, go ahead and remove it if you don't want it '''
-Dim fso, CurrentDir, app, extraArgs
+Dim fso, CurrentDir, app, extraArgs, fullpath
 If argC > 1 Then	'1st arg is the elevStr, if we have more than 1, things need to be executed
 	Set fso = CreateObject("Scripting.FileSystemObject")
 	CurrentDir = fso.GetParentFolderName(WScript.ScriptFullName)
 	app = WScript.Arguments(0)	'get 1st arg
 	extraArgs = getArgs(1,1)	'the last arg is the elevStr, so we grab what's between that and the 1st one
+	fullpath = fso.BuildPath(CurrentDir, app)
 	
-	if not fso.FileExists(app) Then			'absolute path?
-		app = fso.BuildPath(CurrentDir, app)	'relative path?
-		If not fso.FileExists(app) Then WScript.Quit 1	'can't find executable
-	end if
-	objShell.ShellExecute app,extraArgs
+	If fso.FileExists(fullpath) Then app = fullpath	'test as a relative path, if it works, use it
+	If objShell.ShellExecute(app,extraArgs) <= 32 Then WScript.Quit 1	'try to execute, error if we can't
 End If
 
 ''''' Add your code here, if needed. '''''
