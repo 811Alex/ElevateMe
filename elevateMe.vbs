@@ -25,8 +25,8 @@ If argC > 1 Then	'1st arg is the elevStr, if we have more than 1, things need to
 	app = WScript.Arguments(0)	'get 1st arg
 	extraArgs = getArgs(1,1)	'the last arg is the elevStr, so we grab what's between that and the 1st one
 	
-	if not fso.FileExists(app) Then	'absolute path?
-		app = CurrentDir & app		'relative path?
+	if not fso.FileExists(app) Then			'absolute path?
+		app = fso.BuildPath(CurrentDir, app)	'relative path?
 		If not fso.FileExists(app) Then WScript.Quit 1	'can't find executable
 	end if
 	objShell.ShellExecute app,extraArgs
